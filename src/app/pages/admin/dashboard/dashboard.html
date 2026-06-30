@@ -1,0 +1,73 @@
+<div class="container py-3">
+  <div class="d-flex flex-wrap gap-2">
+    <a routerLink="/admin" class="chip-categoria activo">Dashboard</a>
+    <a routerLink="/admin/productos" class="chip-categoria">Productos</a>
+    <a routerLink="/admin/usuarios" class="chip-categoria">Usuarios</a>
+    <a routerLink="/admin/pedidos" class="chip-categoria">Pedidos</a>
+    <a routerLink="/admin/solicitudes" class="chip-categoria">Solicitudes</a>
+  </div>
+</div>
+
+<main class="container pb-5">
+  <div class="mb-4">
+    <span class="marquee">&#9733; ADMIN ZONE &#9733;</span>
+    <h1 class="titulo-jumbo mt-2">Panel de administracion</h1>
+    <p class="subtitulo">Hola {{ nombreAdmin() }}. Aqui tienes el resumen del sistema.</p>
+  </div>
+
+  <!-- Metricas -->
+  <section class="mb-5">
+    <div class="row g-4">
+      <div class="col-12 col-sm-6 col-lg-4" *ngFor="let m of metricas()">
+        <a [routerLink]="m.link" style="text-decoration: none;">
+          <div class="card-zine h-100" [style.border-left]="'8px solid ' + m.color">
+            <p class="texto-maquina mb-1" style="font-size: 1.1rem;">{{ m.titulo }}</p>
+            <p class="titulo-jumbo m-0" style="font-size: clamp(2rem, 4vw, 3rem);" [style.color]="m.color">{{ m.valor }}</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ultimos movimientos -->
+  <section class="row g-4">
+    <div class="col-12 col-lg-6">
+      <div class="card-zine">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="titulo-display m-0">Ultimos pedidos</h2>
+          <a routerLink="/admin/pedidos" class="btn-zine btn-zine-sm">Ver todos</a>
+        </div>
+        <p class="texto-maquina mb-0" *ngIf="ultimosPedidos().length === 0">Aun no hay pedidos.</p>
+        <div class="d-flex justify-content-between align-items-center texto-maquina mb-2 pb-2"
+             style="border-bottom: 1px dashed rgba(29,24,20,0.2);" *ngFor="let p of ultimosPedidos()">
+          <div>
+            <strong style="color: var(--rp-red);">{{ p.id }}</strong><br>
+            <small>{{ p.correoCliente }}</small>
+          </div>
+          <div class="text-end">
+            <strong>{{ p.total | clp }}</strong><br>
+            <small>{{ p.estado }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="card-zine">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="titulo-display m-0">Ultimas solicitudes</h2>
+          <a routerLink="/admin/solicitudes" class="btn-zine btn-zine-sm">Ver todas</a>
+        </div>
+        <p class="texto-maquina mb-0" *ngIf="ultimasSolicitudes().length === 0">Aun no hay solicitudes.</p>
+        <div class="d-flex justify-content-between align-items-center texto-maquina mb-2 pb-2"
+             style="border-bottom: 1px dashed rgba(29,24,20,0.2);" *ngFor="let s of ultimasSolicitudes()">
+          <div>
+            <strong style="color: var(--rp-red);">{{ s.id }}</strong><br>
+            <small>{{ etiquetaTipo[s.tipo] }} &middot; {{ s.correoCliente }}</small>
+          </div>
+          <div class="text-end"><small>{{ s.estado }}</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

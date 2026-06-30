@@ -1,0 +1,147 @@
+<div class="container py-5">
+
+  <!-- VISTA 1: formulario de pago -->
+  <section *ngIf="!pagado()">
+    <div class="text-center mb-4">
+      <span class="marquee">&#9733; PAGO SEGURO &#9733;</span>
+      <h1 class="titulo-jumbo mt-2">Finalizar compra</h1>
+    </div>
+
+    <div class="alert-zine alert-zine-info mb-4">
+      <strong>Entorno de demostracion:</strong> ningun cargo real sera realizado.
+      Tus datos no se envian a ningun procesador de pagos.
+    </div>
+
+    <!-- Carrito vacio -->
+    <div class="card-zine text-center" *ngIf="items().length === 0">
+      <h2 class="titulo-display">Tu carrito esta vacio</h2>
+      <p class="texto-maquina">Agrega productos antes de pasar a pagar.</p>
+      <a routerLink="/catalogo" class="btn-zine btn-zine-rojo">Ir al catalogo</a>
+    </div>
+
+    <div class="row g-4" *ngIf="items().length > 0">
+      <!-- Formulario -->
+      <div class="col-12 col-lg-7">
+        <div class="card-zine">
+          <form [formGroup]="formCheckout" (ngSubmit)="pagar()" class="form-zine" novalidate>
+
+            <h2 class="titulo-display">Datos de envio</h2>
+            <div class="row mt-2">
+              <div class="col-12 col-md-6 mb-3">
+                <label for="nombreEnvio" class="form-label">Nombre</label>
+                <input type="text" id="nombreEnvio" class="form-control" formControlName="nombreEnvio"
+                       [class.is-invalid]="esInvalido('nombreEnvio')">
+                <div class="invalid-feedback" *ngIf="esInvalido('nombreEnvio')">Nombre obligatorio.</div>
+              </div>
+              <div class="col-12 col-md-6 mb-3">
+                <label for="telefonoEnvio" class="form-label">Telefono</label>
+                <input type="tel" id="telefonoEnvio" class="form-control" formControlName="telefonoEnvio"
+                       [class.is-invalid]="esInvalido('telefonoEnvio')" placeholder="+56 9 1234 5678">
+                <div class="invalid-feedback" *ngIf="esInvalido('telefonoEnvio')">Telefono invalido.</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="direccionEnvio" class="form-label">Direccion</label>
+              <input type="text" id="direccionEnvio" class="form-control" formControlName="direccionEnvio"
+                     [class.is-invalid]="esInvalido('direccionEnvio')" placeholder="Calle, numero">
+              <div class="invalid-feedback" *ngIf="esInvalido('direccionEnvio')">Direccion obligatoria.</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="comunaEnvio" class="form-label">Comuna / Ciudad</label>
+              <input type="text" id="comunaEnvio" class="form-control" formControlName="comunaEnvio"
+                     [class.is-invalid]="esInvalido('comunaEnvio')">
+              <div class="invalid-feedback" *ngIf="esInvalido('comunaEnvio')">Comuna obligatoria.</div>
+            </div>
+
+            <hr>
+            <h2 class="titulo-display">Metodo de pago</h2>
+            <div class="mb-3">
+              <label for="metodoPago" class="form-label">Selecciona</label>
+              <select id="metodoPago" class="form-select" formControlName="metodoPago"
+                      [class.is-invalid]="esInvalido('metodoPago')">
+                <option value="">-- Elegir --</option>
+                <option value="credito">Tarjeta de credito</option>
+                <option value="debito">Tarjeta de debito</option>
+                <option value="transferencia">Transferencia bancaria</option>
+              </select>
+              <div class="invalid-feedback" *ngIf="esInvalido('metodoPago')">Elige un metodo de pago.</div>
+            </div>
+
+            <!-- Datos de tarjeta (solo si aplica) -->
+            <div class="row" *ngIf="requiereTarjeta">
+              <div class="col-12 mb-3">
+                <label for="numTarjeta" class="form-label">Numero de tarjeta</label>
+                <input type="text" id="numTarjeta" class="form-control" formControlName="numTarjeta"
+                       [class.is-invalid]="esInvalido('numTarjeta')" placeholder="1234 5678 9012 3456"
+                       maxlength="23" (input)="formatearTarjeta($any($event.target).value)">
+                <div class="invalid-feedback" *ngIf="esInvalido('numTarjeta')">Numero invalido (13-19 digitos).</div>
+              </div>
+              <div class="col-6 mb-3">
+                <label for="vencTarjeta" class="form-label">Vencimiento</label>
+                <input type="text" id="vencTarjeta" class="form-control" formControlName="vencTarjeta"
+                       [class.is-invalid]="esInvalido('vencTarjeta')" placeholder="MM/AA"
+                       maxlength="5" (input)="formatearVencimiento($any($event.target).value)">
+                <div class="invalid-feedback" *ngIf="esInvalido('vencTarjeta')">Formato MM/AA.</div>
+              </div>
+              <div class="col-6 mb-3">
+                <label for="cvvTarjeta" class="form-label">CVV</label>
+                <input type="text" id="cvvTarjeta" class="form-control" formControlName="cvvTarjeta"
+                       [class.is-invalid]="esInvalido('cvvTarjeta')" placeholder="123" maxlength="4">
+                <div class="invalid-feedback" *ngIf="esInvalido('cvvTarjeta')">CVV invalido.</div>
+              </div>
+            </div>
+
+            <div class="alert-zine alert-zine-warn mb-3" *ngIf="errorGlobal()">{{ errorGlobal() }}</div>
+
+            <button type="submit" class="btn-zine btn-zine-rojo w-100 mt-2">Pagar y confirmar pedido</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Resumen -->
+      <div class="col-12 col-lg-5">
+        <div class="card-zine" style="position: sticky; top: 100px;">
+          <h2 class="titulo-display">Tu pedido</h2>
+          <div class="mt-3">
+            <div class="d-flex justify-content-between texto-maquina mb-1" *ngFor="let item of items()">
+              <span>{{ item.cantidad }} x {{ item.nombre }}</span>
+              <span>{{ item.precio * item.cantidad | clp }}</span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between">
+              <span class="titulo-display">Total</span>
+              <span class="producto-precio" style="font-size: 1.8rem;">{{ total() | clp }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISTA 2: exito -->
+  <section *ngIf="pagado()">
+    <div class="text-center">
+      <span class="marquee" style="background: #d98f4c; color: var(--rp-ink);">&#9733; PAGO EXITOSO &#9733;</span>
+      <h1 class="titulo-jumbo mt-3">&#161;<span class="acento-rojo">Gracias</span> por tu compra!</h1>
+    </div>
+
+    <div class="row justify-content-center mt-4">
+      <div class="col-12 col-md-9 col-lg-7">
+        <div class="card-zine text-center">
+          <p class="texto-maquina mb-1">N&deg; de orden</p>
+          <p class="titulo-display" style="font-size: 2rem; color: var(--rp-red);">{{ numeroOrden() }}</p>
+          <hr>
+          <p class="texto-maquina">
+            Te enviaremos un correo a <strong>{{ correoConfirmacion() }}</strong> con el detalle.
+          </p>
+          <div class="d-grid gap-2 mt-3">
+            <a routerLink="/catalogo" class="btn-zine btn-zine-rojo">Seguir comprando</a>
+            <a routerLink="/" class="btn-zine btn-zine-sm">Volver al inicio</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,630 @@
+/* =========================================================
+   RetroPlay - styles.css (estilos globales)
+   ---------------------------------------------------------
+   Estilo zine vintage / catalogo retro 80s-90s tipo papel
+   envejecido. Complementa a Bootstrap 5 con identidad propia.
+   Migrado desde la version vanilla (Sumativa 1) al proyecto
+   Angular. Los componentes usan estas clases globales.
+
+   Secciones:
+   1. Variables
+   2. Reset / base / layout (sticky footer en app-root)
+   3. Tipografia
+   4. Fondo de papel envejecido
+   5. Navbar
+   6. Hero / banner
+   7. Cards estilo polaroid + cintas
+   8. Stickers SALE
+   9. Botones zine
+   10. Formularios
+   11. Categorias / chips
+   12. Tablas admin
+   13. Footer
+   14. Animaciones
+   15. Responsive
+   ========================================================= */
+
+
+/* 1. Variables -------------------------------------------- */
+:root {
+  --rp-paper:        #f1e6cb;
+  --rp-paper-dark:   #e6d6b3;
+  --rp-paper-stain:  #d8c39a;
+  --rp-ink:          #1d1814;
+  --rp-ink-soft:     #4b3f33;
+  --rp-red:          #c0392b;
+  --rp-red-deep:     #8c2c22;
+  --rp-cyan:         #2aa6c9;
+  --rp-yellow:       #f3c83d;
+  --rp-tape:         rgba(243, 200, 61, 0.55);
+  --rp-tape-blue:    rgba(42, 166, 201, 0.45);
+  --rp-shadow:       0 6px 0 rgba(29, 24, 20, 0.85);
+  --rp-shadow-soft:  0 10px 25px rgba(29, 24, 20, 0.18);
+
+  --rp-font-display: "Anton", "Bebas Neue", Impact, sans-serif;
+  --rp-font-text:    "Special Elite", "Courier New", monospace;
+  --rp-font-accent:  "VT323", "Courier New", monospace;
+}
+
+
+/* 2. Reset / base / layout -------------------------------- */
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--rp-font-text);
+  color: var(--rp-ink);
+  background-color: var(--rp-paper);
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  /* Fondo de papel envejecido aplicado a todo el sitio */
+  background-image:
+    radial-gradient(circle at 15% 20%, var(--rp-paper-stain) 0%, transparent 25%),
+    radial-gradient(circle at 80% 65%, var(--rp-paper-stain) 0%, transparent 22%),
+    radial-gradient(circle at 50% 90%, var(--rp-paper-stain) 0%, transparent 28%),
+    repeating-linear-gradient(0deg, transparent 0 4px, rgba(0,0,0,0.015) 4px 5px);
+}
+
+/* Sticky footer: app-root es la columna flexible.
+   En Angular el contenido vive dentro de <app-root>. */
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+.footer-zine {
+  flex-shrink: 0;
+}
+
+
+/* 3. Tipografia ------------------------------------------- */
+h1, h2, h3, h4, h5,
+.titulo-display {
+  font-family: var(--rp-font-display);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--rp-ink);
+  line-height: 1;
+}
+
+.titulo-jumbo {
+  font-family: var(--rp-font-display);
+  font-size: clamp(2.2rem, 5vw + 1rem, 5rem);
+  line-height: 0.95;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.titulo-jumbo .acento-rojo { color: var(--rp-red); }
+.titulo-jumbo .acento-cyan { color: var(--rp-cyan); }
+
+.subtitulo {
+  font-family: var(--rp-font-accent);
+  font-size: 1.4rem;
+  color: var(--rp-ink-soft);
+}
+
+.texto-maquina {
+  font-family: var(--rp-font-accent);
+}
+
+a { color: var(--rp-red-deep); text-decoration: none; }
+a:hover { color: var(--rp-red); text-decoration: underline; }
+
+
+/* 4. Detalles de papel ------------------------------------ */
+.borde-zigzag {
+  position: relative;
+  padding-bottom: 24px;
+}
+.borde-zigzag::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0; height: 16px;
+  background: linear-gradient(135deg, var(--rp-ink) 25%, transparent 25%) -10px 0,
+              linear-gradient(225deg, var(--rp-ink) 25%, transparent 25%) -10px 0;
+  background-size: 20px 20px;
+  background-repeat: repeat-x;
+  opacity: 0.85;
+}
+
+
+/* 5. Navbar ----------------------------------------------- */
+.navbar-retro {
+  background-color: var(--rp-paper-dark) !important;
+  border-bottom: 3px solid var(--rp-ink);
+  box-shadow: 0 4px 0 rgba(29, 24, 20, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+
+.navbar-retro .navbar-brand {
+  font-family: var(--rp-font-display);
+  font-size: 2rem;
+  letter-spacing: 2px;
+  color: var(--rp-ink) !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transform: rotate(-2deg);
+}
+.navbar-retro .navbar-brand .brand-badge {
+  display: inline-block;
+  background: var(--rp-red);
+  color: var(--rp-paper);
+  padding: 2px 10px;
+  border: 3px solid var(--rp-ink);
+  transform: rotate(3deg);
+  box-shadow: 3px 3px 0 var(--rp-ink);
+}
+
+.navbar-retro .nav-link {
+  font-family: var(--rp-font-display);
+  font-size: 1.15rem;
+  letter-spacing: 1px;
+  color: var(--rp-ink) !important;
+  position: relative;
+  padding: 0.5rem 0.85rem !important;
+  background: none;
+  border: none;
+}
+.navbar-retro .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 12%; right: 88%; bottom: 4px; height: 3px;
+  background: var(--rp-red);
+  transition: right 0.25s ease;
+}
+.navbar-retro .nav-link:hover::after,
+.navbar-retro .nav-link.activo::after { right: 12%; }
+
+.navbar-retro .nav-link:hover { color: var(--rp-red) !important; }
+
+/* Boton "Registrarme": antepone .navbar-retro para vencer
+   la especificidad de .navbar-retro .nav-link (con !important). */
+.navbar-retro .nav-link.btn-registrarme {
+  background: var(--rp-ink) !important;
+  color: var(--rp-paper) !important;
+  border: 2px solid var(--rp-ink);
+  box-shadow: 3px 3px 0 var(--rp-red);
+  margin-left: 0.5rem;
+}
+.navbar-retro .nav-link.btn-registrarme:hover {
+  color: var(--rp-paper) !important;
+  background: var(--rp-red) !important;
+  box-shadow: 3px 3px 0 var(--rp-ink);
+}
+
+.navbar-retro .nav-link.btn-cerrar-sesion {
+  font-family: var(--rp-font-display);
+  font-size: 1.05rem;
+  letter-spacing: 1px;
+  background: transparent;
+  color: var(--rp-ink) !important;
+  border: 2px solid var(--rp-ink);
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+}
+.navbar-retro .nav-link.btn-cerrar-sesion:hover {
+  background: var(--rp-ink);
+  color: var(--rp-paper) !important;
+}
+
+.nav-carrito { position: relative; }
+.badge-carrito {
+  display: inline-block;
+  min-width: 22px;
+  padding: 2px 7px;
+  margin-left: 4px;
+  background: var(--rp-red);
+  color: var(--rp-paper);
+  border-radius: 12px;
+  font-family: var(--rp-font-accent);
+  font-size: 0.95rem;
+  line-height: 1;
+  vertical-align: middle;
+}
+.badge-carrito.pulse { animation: cart-bounce 0.5s ease; }
+
+
+/* 6. Hero / banner ---------------------------------------- */
+.hero-zine {
+  position: relative;
+  padding: 3.5rem 0 2.5rem;
+  border-bottom: 4px solid var(--rp-ink);
+  overflow: hidden;
+}
+.hero-zine .marquee {
+  display: inline-block;
+  background: var(--rp-ink);
+  color: var(--rp-yellow);
+  font-family: var(--rp-font-display);
+  font-size: 1rem;
+  padding: 4px 16px;
+  letter-spacing: 3px;
+  transform: rotate(-1deg);
+  margin-bottom: 1rem;
+}
+.hero-zine .cta-jumbo {
+  display: inline-block;
+  background: var(--rp-paper);
+  border: 3px solid var(--rp-ink);
+  padding: 1rem 1.5rem;
+  font-family: var(--rp-font-display);
+  font-size: 1.5rem;
+  color: var(--rp-ink);
+  box-shadow: 6px 6px 0 var(--rp-ink);
+  transform: rotate(-2deg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hero-zine .cta-jumbo:hover {
+  transform: rotate(0deg) translateY(-2px);
+  box-shadow: 6px 8px 0 var(--rp-red);
+  text-decoration: none;
+  color: var(--rp-red);
+}
+
+
+/* 7. Cards estilo polaroid + cintas ----------------------- */
+.card-polaroid {
+  background: #fdfaf0;
+  border: 1px solid rgba(29,24,20,0.15);
+  padding: 0.75rem 0.75rem 1rem;
+  box-shadow: var(--rp-shadow-soft);
+  position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border-radius: 2px;
+}
+.card-polaroid::before,
+.card-polaroid::after {
+  content: "";
+  position: absolute;
+  width: 70px; height: 18px;
+  background: var(--rp-tape);
+  top: -10px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
+}
+.card-polaroid::before {
+  left: 10%;
+  transform: rotate(-8deg);
+}
+.card-polaroid::after {
+  right: 10%;
+  transform: rotate(7deg);
+  background: var(--rp-tape-blue);
+}
+.card-polaroid:hover {
+  transform: translateY(-6px) rotate(-0.4deg);
+  box-shadow: 0 18px 32px rgba(29, 24, 20, 0.25);
+}
+
+.card-polaroid .producto-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: var(--rp-paper-dark);
+  display: block;
+  border-radius: 2px;
+}
+
+.card-polaroid .producto-nombre {
+  font-family: var(--rp-font-display);
+  font-size: 1.25rem;
+  margin: 0.85rem 0 0.25rem;
+  letter-spacing: 0.5px;
+}
+
+.card-polaroid .producto-precio {
+  font-family: var(--rp-font-accent);
+  font-size: 1.5rem;
+  color: var(--rp-ink);
+}
+
+.card-polaroid .producto-meta {
+  font-family: var(--rp-font-text);
+  font-size: 0.85rem;
+  color: var(--rp-ink-soft);
+}
+
+.card-zine {
+  background: #fdfaf0;
+  border: 3px solid var(--rp-ink);
+  padding: 1.25rem;
+  box-shadow: 6px 6px 0 var(--rp-ink);
+  border-radius: 2px;
+}
+
+
+/* 8. Stickers SALE ---------------------------------------- */
+.sticker-sale {
+  position: absolute;
+  top: 12px; right: 12px;
+  background: var(--rp-red);
+  color: var(--rp-paper);
+  font-family: var(--rp-font-display);
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  padding: 8px 12px;
+  border-radius: 50%;
+  width: 64px; height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-12deg);
+  box-shadow: 2px 2px 0 var(--rp-ink);
+  animation: sticker-pulse 2.4s ease-in-out infinite;
+  text-align: center;
+  line-height: 1;
+  z-index: 2;
+}
+
+
+/* 9. Botones zine ----------------------------------------- */
+.btn-zine {
+  font-family: var(--rp-font-display);
+  letter-spacing: 1px;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  border: 3px solid var(--rp-ink);
+  background: var(--rp-paper);
+  color: var(--rp-ink);
+  padding: 0.6rem 1.2rem;
+  box-shadow: 5px 5px 0 var(--rp-ink);
+  border-radius: 2px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+}
+.btn-zine:hover {
+  background: var(--rp-yellow);
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0 var(--rp-ink);
+  color: var(--rp-ink);
+  text-decoration: none;
+}
+.btn-zine:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--rp-ink);
+}
+
+.btn-zine-rojo {
+  background: var(--rp-red);
+  color: var(--rp-paper);
+}
+.btn-zine-rojo:hover {
+  background: var(--rp-red-deep);
+  color: var(--rp-paper);
+}
+
+.btn-zine-oscuro {
+  background: var(--rp-ink);
+  color: var(--rp-paper);
+}
+.btn-zine-oscuro:hover {
+  background: var(--rp-red);
+  color: var(--rp-paper);
+}
+
+.btn-zine-sm {
+  padding: 0.35rem 0.8rem;
+  font-size: 0.9rem;
+  box-shadow: 3px 3px 0 var(--rp-ink);
+}
+
+.btn-zine:disabled,
+.btn-zine[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* 10. Formularios ----------------------------------------- */
+.form-zine .form-label {
+  font-family: var(--rp-font-display);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  color: var(--rp-ink);
+}
+
+.form-zine .form-control,
+.form-zine .form-select {
+  background-color: #fdfaf0;
+  border: 2px solid var(--rp-ink);
+  border-radius: 2px;
+  font-family: var(--rp-font-text);
+  font-size: 1rem;
+  color: var(--rp-ink);
+  box-shadow: 3px 3px 0 rgba(29,24,20,0.4);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.form-zine .form-control:focus,
+.form-zine .form-select:focus {
+  border-color: var(--rp-red);
+  box-shadow: 3px 3px 0 var(--rp-red);
+  outline: none;
+}
+
+.form-zine .form-control.is-invalid {
+  border-color: var(--rp-red);
+  box-shadow: 3px 3px 0 var(--rp-red);
+}
+.form-zine .form-control.is-valid {
+  border-color: #2e7d32;
+  box-shadow: 3px 3px 0 #2e7d32;
+}
+.form-zine .invalid-feedback {
+  font-family: var(--rp-font-text);
+  color: var(--rp-red-deep);
+  font-weight: bold;
+}
+
+/* Toggle de visibilidad de password */
+.password-wrapper {
+  position: relative;
+}
+.password-wrapper > .form-control {
+  padding-right: 90px;
+}
+.password-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--rp-ink);
+  color: var(--rp-paper);
+  border: 2px solid var(--rp-ink);
+  font-family: var(--rp-font-display);
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  padding: 4px 9px;
+  cursor: pointer;
+  border-radius: 2px;
+  box-shadow: 2px 2px 0 var(--rp-red);
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+  z-index: 5;
+}
+.password-toggle:hover {
+  background: var(--rp-red);
+  box-shadow: 2px 2px 0 var(--rp-ink);
+}
+.password-toggle:active {
+  transform: translateY(-50%) translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--rp-ink);
+}
+
+.invalid-feedback:not(:empty) { display: block; }
+
+.alert-zine {
+  background: #fdfaf0;
+  border: 2px solid var(--rp-ink);
+  border-left-width: 8px;
+  border-left-color: var(--rp-red);
+  border-radius: 2px;
+  padding: 0.85rem 1rem;
+  color: var(--rp-ink);
+  box-shadow: 3px 3px 0 rgba(29,24,20,0.2);
+}
+.alert-zine-info  { border-left-color: var(--rp-cyan); }
+.alert-zine-warn  { border-left-color: var(--rp-yellow); }
+.alert-zine-ok    { border-left-color: #2e7d32; }
+
+
+/* 11. Categorias / chips ---------------------------------- */
+.chip-categoria {
+  display: inline-block;
+  font-family: var(--rp-font-display);
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  background: var(--rp-paper);
+  border: 2px solid var(--rp-ink);
+  padding: 4px 12px;
+  margin: 0 4px 8px 0;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.chip-categoria:hover,
+.chip-categoria.activo {
+  background: var(--rp-yellow);
+  transform: rotate(-1deg);
+  text-decoration: none;
+  color: var(--rp-ink);
+}
+
+
+/* 12. Tablas admin ---------------------------------------- */
+.tabla-zine {
+  background: #fdfaf0;
+  border: 2px solid var(--rp-ink);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.tabla-zine thead {
+  background: var(--rp-ink);
+  color: var(--rp-paper);
+  font-family: var(--rp-font-display);
+  letter-spacing: 1px;
+}
+.tabla-zine th,
+.tabla-zine td {
+  vertical-align: middle;
+}
+.tabla-zine tbody tr:nth-child(even) {
+  background: rgba(29, 24, 20, 0.04);
+}
+
+
+/* 13. Footer ---------------------------------------------- */
+.footer-zine {
+  background: var(--rp-ink);
+  color: var(--rp-paper);
+  font-family: var(--rp-font-text);
+  padding: 2rem 0;
+  margin-top: 4rem;
+  border-top: 4px solid var(--rp-red);
+}
+.footer-zine h5 {
+  color: var(--rp-yellow);
+  font-family: var(--rp-font-display);
+  letter-spacing: 1px;
+}
+.footer-zine a { color: var(--rp-paper); }
+.footer-zine a:hover { color: var(--rp-yellow); }
+
+
+/* 14. Animaciones ----------------------------------------- */
+@keyframes sticker-pulse {
+  0%, 100% { transform: rotate(-12deg) scale(1); }
+  50%      { transform: rotate(-12deg) scale(1.08); }
+}
+
+@keyframes cart-bounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.4); }
+  70%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+@keyframes marquee-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+.hero-zine .marquee { animation: marquee-blink 1.6s ease-in-out infinite; }
+
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: none;
+}
+
+
+/* 15. Responsive ------------------------------------------ */
+@media (max-width: 991.98px) {
+  .navbar-retro .navbar-brand { font-size: 1.6rem; }
+  .hero-zine .cta-jumbo { font-size: 1.25rem; padding: 0.85rem 1.2rem; }
+  .sticker-sale { width: 56px; height: 56px; font-size: 0.85rem; }
+}
+
+@media (max-width: 575.98px) {
+  body { font-size: 1rem; }
+  .navbar-retro .navbar-brand { font-size: 1.4rem; transform: none; }
+  .navbar-retro .nav-link { font-size: 1rem; }
+  .hero-zine { padding: 2.5rem 0 1.75rem; }
+  .titulo-jumbo { font-size: clamp(2rem, 9vw, 3rem); }
+  .card-polaroid:hover { transform: translateY(-3px); }
+  .btn-zine { font-size: 0.95rem; box-shadow: 4px 4px 0 var(--rp-ink); }
+}

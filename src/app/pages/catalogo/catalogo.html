@@ -1,0 +1,59 @@
+<div class="container py-4">
+  <div class="text-center">
+    <span class="marquee">&#9733; TODO EL INVENTARIO &#9733;</span>
+    <h1 class="titulo-jumbo mt-2">Catalogo retro</h1>
+    <p class="subtitulo">Filtra por categoria o busca por nombre.</p>
+  </div>
+</div>
+
+<!-- Filtros (ngModel) -->
+<section class="container mb-4">
+  <div class="card-zine">
+    <div class="row g-3 align-items-end form-zine">
+      <div class="col-12 col-md-6">
+        <label for="busqueda" class="form-label">Buscar</label>
+        <input type="search" id="busqueda" class="form-control"
+               [(ngModel)]="busqueda" name="busqueda"
+               placeholder="Ej: Sonic, NES, Walkman...">
+      </div>
+      <div class="col-12 col-md-4">
+        <label for="categoria" class="form-label">Categoria</label>
+        <select id="categoria" class="form-select" [(ngModel)]="categoria" name="categoria">
+          <option *ngFor="let c of categorias" [value]="c.valor">{{ c.etiqueta }}</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-2 d-grid">
+        <button class="btn-zine btn-zine-sm" type="button" (click)="limpiar()">Limpiar</button>
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <button class="chip-categoria" *ngFor="let c of categorias"
+              [class.activo]="categoria === c.valor" (click)="filtrarPorChip(c.valor)">
+        {{ c.etiqueta }}
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Feedback -->
+<section class="container" *ngIf="feedback()">
+  <div class="alert-zine alert-zine-ok mb-3">{{ feedback() }}</div>
+</section>
+
+<!-- Grilla -->
+<section class="container pb-5">
+  <p class="texto-maquina mb-3">
+    Mostrando {{ productosFiltrados().length }} producto(s).
+  </p>
+
+  <div class="row g-4">
+    <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *ngFor="let p of productosFiltrados()">
+      <app-producto-card [producto]="p" (agregar)="onAgregar($event)"></app-producto-card>
+    </div>
+  </div>
+
+  <div class="card-zine text-center" *ngIf="productosFiltrados().length === 0">
+    <p class="texto-maquina mb-0">No encontramos productos con esos filtros. Intenta con otra busqueda.</p>
+  </div>
+</section>

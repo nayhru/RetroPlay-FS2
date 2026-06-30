@@ -1,0 +1,143 @@
+<!-- ===================== HERO ===================== -->
+<header class="hero-zine">
+  <div class="container">
+    <div class="row align-items-center g-4">
+
+      <div class="col-12 col-lg-7">
+        <span class="marquee">&#9733; NUEVOS INGRESOS &#9733;</span>
+        <h1 class="titulo-jumbo">
+          Los clasicos <span class="acento-rojo">vuelven</span> a casa.
+        </h1>
+        <p class="subtitulo mt-3">
+          Cartuchos, consolas y articulos retro de los 80 y 90.
+          Restauracion, gradeado y boxes coleccionables hechas a mano.
+        </p>
+        <div class="mt-4 d-flex flex-wrap gap-3">
+          <a routerLink="/catalogo" class="cta-jumbo">Ver el catalogo</a>
+          <a routerLink="/servicios" class="btn-zine btn-zine-rojo">Nuestros servicios</a>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-5">
+        <div class="row g-3 align-items-center">
+          <div class="col-6">
+            <div class="card-polaroid">
+              <img src="assets/img/productos/supermariones.webp" alt="Cartucho Super Mario Bros NES" class="producto-img" loading="lazy">
+              <p class="producto-meta mt-2 mb-0 text-center">CARTUCHO NES</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card-polaroid" style="transform: rotate(2deg);">
+              <img src="assets/img/productos/game-boy-classic.webp" alt="Game Boy Classic" class="producto-img" loading="lazy">
+              <p class="producto-meta mt-2 mb-0 text-center">GAME BOY 89</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card-polaroid" style="transform: rotate(-3deg);">
+              <img src="assets/img/productos/Sonic-the-Hedgehog-Genesis.webp" alt="Sonic the Hedgehog Genesis" class="producto-img" loading="lazy">
+              <p class="producto-meta mt-2 mb-0 text-center">SEGA GENESIS</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card-polaroid">
+              <img src="assets/img/productos/Walkman-Sony-WM-EX.webp" alt="Walkman Sony WM-EX" class="producto-img" loading="lazy">
+              <p class="producto-meta mt-2 mb-0 text-center">WALKMAN 92</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== CATEGORIAS ===================== -->
+<section class="py-4 borde-zigzag">
+  <div class="container text-center">
+    <h2 class="titulo-display mb-3">Explora por categoria</h2>
+    <div appReveal>
+      <a routerLink="/catalogo" [queryParams]="{ cat: 'juegos' }" class="chip-categoria">Juegos</a>
+      <a routerLink="/catalogo" [queryParams]="{ cat: 'consolas' }" class="chip-categoria">Consolas</a>
+      <a routerLink="/catalogo" [queryParams]="{ cat: 'accesorios' }" class="chip-categoria">Accesorios</a>
+      <a routerLink="/catalogo" [queryParams]="{ cat: 'merch' }" class="chip-categoria">Merch &amp; posters</a>
+      <a routerLink="/catalogo" [queryParams]="{ cat: 'boxes' }" class="chip-categoria">Boxes tematicas</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DESTACADOS ===================== -->
+<section class="py-5">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-end justify-content-between mb-4" appReveal>
+      <h2 class="titulo-display m-0">Lo mas buscado del numero</h2>
+      <a routerLink="/catalogo" class="btn-zine btn-zine-sm">Ver todo</a>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-sm-6 col-lg-3" *ngFor="let p of destacados()">
+        <article class="card-polaroid h-100 position-relative">
+          <span class="sticker-sale" *ngIf="p.oferta">&#161;SALE!</span>
+          <a [routerLink]="['/detalle', p.id]" class="d-block">
+            <img [src]="p.imagen" [alt]="p.nombre" class="producto-img" loading="lazy">
+          </a>
+          <h3 class="producto-nombre mt-2 mb-1">{{ p.nombre }}</h3>
+          <p class="producto-meta mb-2">{{ p.plataforma }} &middot; {{ p.categoria }}</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="producto-precio">{{ p.precio | clp }}</span>
+            <a [routerLink]="['/detalle', p.id]" class="btn-zine btn-zine-sm btn-zine-rojo">Ver</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SERVICIOS ===================== -->
+<section class="py-5" style="background: var(--rp-paper-dark); border-top: 3px solid var(--rp-ink); border-bottom: 3px solid var(--rp-ink);">
+  <div class="container">
+    <div class="text-center mb-4" appReveal>
+      <span class="marquee">&#9733; MAS QUE UNA TIENDA &#9733;</span>
+      <h2 class="titulo-jumbo mt-2">Nuestros <span class="acento-cyan">servicios</span></h2>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-6 col-lg-4" appReveal>
+        <div class="card-zine h-100">
+          <h3 class="titulo-display">Restauracion</h3>
+          <p class="texto-maquina mb-3">Cartuchos limpios, baterias nuevas, pines reparados.</p>
+          <p class="producto-precio">Desde {{ 9990 | clp }}</p>
+          <a routerLink="/servicios" class="btn-zine btn-zine-sm mt-2">Mas info</a>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4" appReveal>
+        <div class="card-zine h-100">
+          <h3 class="titulo-display">Gradeado</h3>
+          <p class="texto-maquina mb-3">Evaluacion y certificacion de juegos y cartas.</p>
+          <p class="producto-precio">Desde {{ 14990 | clp }}</p>
+          <a routerLink="/servicios" class="btn-zine btn-zine-sm mt-2">Mas info</a>
+        </div>
+      </div>
+      <div class="col-12 col-md-12 col-lg-4" appReveal>
+        <div class="card-zine h-100">
+          <h3 class="titulo-display">Box personalizada</h3>
+          <p class="texto-maquina mb-3">Una box a medida. Tu eliges la tematica y presupuesto, nosotros curamos los items.</p>
+          <p class="producto-precio">Desde {{ 69990 | clp }}</p>
+          <a routerLink="/servicios" class="btn-zine btn-zine-sm mt-2">Mas info</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA REGISTRO ===================== -->
+<section class="py-5">
+  <div class="container">
+    <div class="card-zine text-center" appReveal>
+      <h2 class="titulo-jumbo">Unete al <span class="acento-rojo">club retro</span></h2>
+      <p class="subtitulo">Crea tu cuenta y guarda tu carrito, recibe ofertas y solicita servicios.</p>
+      <div class="mt-3 d-flex justify-content-center flex-wrap gap-3">
+        <a routerLink="/registro" class="btn-zine btn-zine-rojo">Crear cuenta</a>
+        <a routerLink="/login" class="btn-zine btn-zine-oscuro">Ya tengo cuenta</a>
+      </div>
+    </div>
+  </div>
+</section>

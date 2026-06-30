@@ -1,0 +1,86 @@
+<div class="container py-3">
+  <div class="d-flex flex-wrap gap-2">
+    <a routerLink="/admin" class="chip-categoria">Dashboard</a>
+    <a routerLink="/admin/productos" class="chip-categoria">Productos</a>
+    <a routerLink="/admin/usuarios" class="chip-categoria">Usuarios</a>
+    <a routerLink="/admin/pedidos" class="chip-categoria activo">Pedidos</a>
+    <a routerLink="/admin/solicitudes" class="chip-categoria">Solicitudes</a>
+  </div>
+</div>
+
+<main class="container pb-5">
+  <div class="mb-4">
+    <h1 class="titulo-jumbo m-0">Pedidos</h1>
+    <p class="subtitulo m-0">Gestiona el estado de cada orden.</p>
+  </div>
+
+  <div class="card-zine mb-4 form-zine">
+    <div class="row g-3 align-items-end">
+      <div class="col-12 col-md-8">
+        <label for="busq" class="form-label">Buscar por correo o N&deg; de orden</label>
+        <input type="search" id="busq" class="form-control" [(ngModel)]="busqueda" name="busq">
+      </div>
+      <div class="col-12 col-md-4">
+        <label for="estf" class="form-label">Estado</label>
+        <select id="estf" class="form-select" [(ngModel)]="estado" name="estf">
+          <option value="">Todos</option>
+          <option *ngFor="let e of estados" [value]="e">{{ e }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-zine text-center" *ngIf="pedidosFiltrados().length === 0">
+    <p class="texto-maquina mb-0">No hay pedidos con esos filtros.</p>
+  </div>
+
+  <details class="card-zine mb-3" *ngFor="let p of pedidosFiltrados()">
+    <summary style="cursor: pointer; list-style: none;">
+      <div class="row g-3 align-items-center">
+        <div class="col-12 col-md-3">
+          <p class="texto-maquina mb-0 small">N&deg; de orden</p>
+          <p class="titulo-display m-0" style="color: var(--rp-red);">{{ p.id }}</p>
+          <p class="texto-maquina mb-0 small">{{ formatearFecha(p.fecha) }}</p>
+        </div>
+        <div class="col-12 col-md-4">
+          <p class="texto-maquina mb-0"><strong>{{ p.nombreCliente }}</strong></p>
+          <p class="texto-maquina mb-0 small">{{ p.correoCliente }}</p>
+        </div>
+        <div class="col-12 col-md-3">
+          <p class="texto-maquina mb-0 small">Estado</p>
+          <span class="chip-categoria activo">{{ p.estado }}</span>
+        </div>
+        <div class="col-12 col-md-2 text-md-end">
+          <p class="texto-maquina mb-0 small">Total</p>
+          <p class="producto-precio m-0">{{ p.total | clp }}</p>
+        </div>
+      </div>
+    </summary>
+
+    <hr>
+    <div class="row g-3 mt-1">
+      <div class="col-12 col-md-7">
+        <h4 class="titulo-display">Items</h4>
+        <p class="texto-maquina mb-1" *ngFor="let it of p.items">
+          {{ it.cantidad }} x {{ it.nombre }} <span class="text-muted">&mdash; {{ it.precio * it.cantidad | clp }}</span>
+        </p>
+      </div>
+      <div class="col-12 col-md-5">
+        <h4 class="titulo-display">Datos de envio</h4>
+        <p class="texto-maquina mb-1"><strong>Direccion:</strong> {{ p.direccion }}</p>
+        <p class="texto-maquina mb-1"><strong>Telefono:</strong> {{ p.telefono }}</p>
+        <p class="texto-maquina mb-3"><strong>Pago:</strong> {{ p.metodoPago }}</p>
+
+        <div class="form-zine">
+          <label class="form-label">Cambiar estado</label>
+          <div class="d-flex gap-2">
+            <select class="form-select" #selEstado>
+              <option *ngFor="let e of estados" [value]="e" [selected]="p.estado === e">{{ e }}</option>
+            </select>
+            <button class="btn-zine btn-zine-sm btn-zine-rojo" (click)="cambiarEstado(p.id, selEstado.value)">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+</main>

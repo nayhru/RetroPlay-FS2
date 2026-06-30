@@ -1,0 +1,62 @@
+<div class="container py-3">
+  <div class="d-flex flex-wrap gap-2">
+    <a routerLink="/admin" class="chip-categoria">Dashboard</a>
+    <a routerLink="/admin/productos" class="chip-categoria">Productos</a>
+    <a routerLink="/admin/usuarios" class="chip-categoria activo">Usuarios</a>
+    <a routerLink="/admin/pedidos" class="chip-categoria">Pedidos</a>
+    <a routerLink="/admin/solicitudes" class="chip-categoria">Solicitudes</a>
+  </div>
+</div>
+
+<main class="container pb-5">
+  <div class="mb-4">
+    <h1 class="titulo-jumbo m-0">Usuarios</h1>
+    <p class="subtitulo m-0">Todos los registrados en el sistema.</p>
+  </div>
+
+  <div class="card-zine mb-4 form-zine">
+    <div class="row g-3 align-items-end">
+      <div class="col-12 col-md-8">
+        <label for="busq" class="form-label">Buscar</label>
+        <input type="search" id="busq" class="form-control" [(ngModel)]="busqueda" name="busq" placeholder="Nombre, correo, usuario...">
+      </div>
+      <div class="col-12 col-md-4">
+        <label for="rolf" class="form-label">Rol</label>
+        <select id="rolf" class="form-select" [(ngModel)]="rol" name="rolf">
+          <option value="">Todos</option>
+          <option value="admin">Admin</option>
+          <option value="cliente">Cliente</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table tabla-zine">
+      <thead>
+        <tr>
+          <th>Nombre</th><th>Usuario</th><th>Correo</th><th>Telefono</th>
+          <th>Rol</th><th class="text-center">Pedidos</th><th class="text-end">Total gastado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of usuariosFiltrados()">
+          <td><strong>{{ u.nombre }}</strong></td>
+          <td>{{ u.usuario }}</td>
+          <td>{{ u.correo }}</td>
+          <td>{{ u.telefono || '-' }}</td>
+          <td>
+            <span class="chip-categoria activo"
+                  [style.background]="u.rol === 'admin' ? 'var(--rp-red)' : 'var(--rp-cyan)'"
+                  style="color: var(--rp-paper);">{{ u.rol }}</span>
+          </td>
+          <td class="text-center">{{ cantidadPedidos(u.correo) }}</td>
+          <td class="text-end">{{ totalGastado(u.correo) | clp }}</td>
+        </tr>
+        <tr *ngIf="usuariosFiltrados().length === 0">
+          <td colspan="7" class="text-center texto-maquina py-4">No hay usuarios con esos filtros.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>

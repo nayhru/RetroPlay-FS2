@@ -1,0 +1,101 @@
+<!-- HERO -->
+<header class="hero-zine">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-12 col-lg-7">
+        <span class="marquee">&#9733; TALLER + CLUB &#9733;</span>
+        <h1 class="titulo-jumbo">
+          Mas que <span class="acento-rojo">venta</span>.<br>Es <span class="acento-cyan">carino</span> retro.
+        </h1>
+        <p class="subtitulo mt-3">
+          Restauramos, certificamos y armamos cajas coleccionables. Cada pieza
+          pasa por nuestras manos antes de volver a las tuyas.
+        </p>
+      </div>
+      <div class="col-12 col-lg-5">
+        <div class="card-polaroid" style="transform: rotate(-2deg);">
+          <img src="assets/img/servicios/taller-tienda.webp" alt="Fachada de la tienda RetroPlay"
+               class="producto-img" loading="lazy">
+          <p class="producto-meta text-center mt-2 mb-0">NUESTRO LOCAL</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- TARJETAS DE SERVICIOS -->
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-4" appReveal>
+      <h2 class="titulo-jumbo">Que <span class="acento-rojo">hacemos</span></h2>
+      <p class="subtitulo">Elige el servicio y solicita una cotizacion.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-6 col-lg-4" *ngFor="let s of servicios()" appReveal>
+        <article class="card-zine h-100 d-flex flex-column">
+          <img [src]="s.imagen" [alt]="s.nombre"
+               style="width: 100%; aspect-ratio: 3/2; object-fit: cover; border: 2px solid var(--rp-ink); border-radius: 2px;">
+          <h3 class="titulo-display mt-3 mb-1">{{ s.nombre }}</h3>
+          <p class="texto-maquina mb-3">{{ s.descripcion }}</p>
+          <p class="producto-precio mb-3">Desde {{ s.precioDesde | clp }}</p>
+          <div class="mt-auto d-grid">
+            <a [routerLink]="['/solicitar-servicio']" [queryParams]="{ tipo: s.tipo }"
+               class="btn-zine btn-zine-rojo">Solicitar</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="py-5" style="background: var(--rp-paper-dark); border-top: 3px solid var(--rp-ink); border-bottom: 3px solid var(--rp-ink);">
+  <div class="container">
+    <div class="text-center mb-4" appReveal>
+      <span class="marquee">&#9733; FAQ &#9733;</span>
+      <h2 class="titulo-jumbo mt-2">Preguntas <span class="acento-cyan">comunes</span></h2>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-6" appReveal>
+        <div class="card-zine h-100">
+          <h3 class="titulo-display">Cuanto demora una restauracion?</h3>
+          <p class="texto-maquina mb-0">Entre 5 y 14 dias habiles, segun el estado y los repuestos necesarios.</p>
+        </div>
+      </div>
+      <div class="col-12 col-md-6" appReveal>
+        <div class="card-zine h-100">
+          <h3 class="titulo-display">El gradeado tiene certificado?</h3>
+          <p class="texto-maquina mb-0">Si. Entregamos una boleta sellada con la condicion (1-10) y foto del item con codigo unico.</p>
+        </div>
+      </div>
+      <div class="col-12 col-md-6" appReveal>
+        <div class="card-zine h-100">
+          <h3 class="titulo-display">Box del catalogo vs personalizada?</h3>
+          <p class="texto-maquina mb-0">Las del catalogo vienen pre-armadas. La personalizada se arma a tu gusto: eliges tematica y presupuesto.</p>
+        </div>
+      </div>
+      <div class="col-12 col-md-6" appReveal>
+        <div class="card-zine h-100">
+          <h3 class="titulo-display">Aceptan envios de otras ciudades?</h3>
+          <p class="texto-maquina mb-0">Si. Coordinamos envio por encomienda segun ciudad y peso del item.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5">
+  <div class="container">
+    <div class="card-zine text-center" appReveal>
+      <h2 class="titulo-jumbo">Listo para <span class="acento-rojo">empezar</span>?</h2>
+      <p class="subtitulo">Crea tu cuenta y solicita tu primer servicio hoy.</p>
+      <div class="mt-3 d-flex justify-content-center flex-wrap gap-3">
+        <a routerLink="/solicitar-servicio" class="btn-zine btn-zine-rojo">Solicitar servicio</a>
+        <a routerLink="/catalogo" class="btn-zine btn-zine-oscuro">Ver el catalogo</a>
+      </div>
+    </div>
+  </div>
+</section>

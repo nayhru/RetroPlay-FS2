@@ -1,0 +1,54 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-5">
+
+      <div class="text-center mb-4">
+        <span class="marquee">&#9733; ACCESO AL CLUB RETRO &#9733;</span>
+        <h1 class="titulo-jumbo mt-2">Ingresar</h1>
+      </div>
+
+      <div class="card-zine">
+        <form [formGroup]="formLogin" (ngSubmit)="onSubmit()" class="form-zine" novalidate>
+
+          <div class="mb-3">
+            <label for="correo" class="form-label">Correo</label>
+            <input type="email" id="correo" class="form-control"
+                   formControlName="correo"
+                   [class.is-invalid]="esInvalido('correo')"
+                   placeholder="tucorreo@ejemplo.cl">
+            <div class="invalid-feedback" *ngIf="esInvalido('correo')">
+              <span *ngIf="formLogin.get('correo')?.errors?.['required']">El correo es obligatorio.</span>
+              <span *ngIf="formLogin.get('correo')?.errors?.['email']">El formato del correo no es valido.</span>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" class="form-control"
+                   formControlName="password" appPasswordToggle
+                   [class.is-invalid]="esInvalido('password')"
+                   placeholder="Tu password">
+            <div class="invalid-feedback" *ngIf="esInvalido('password')">
+              La password es obligatoria.
+            </div>
+          </div>
+
+          <div class="alert-zine alert-zine-warn mb-3" *ngIf="errorLogin()">
+            {{ errorLogin() }}
+          </div>
+
+          <button type="submit" class="btn-zine btn-zine-rojo w-100">Ingresar</button>
+        </form>
+
+        <hr class="my-4">
+
+        <p class="text-center mb-2">
+          &iquest;No tienes cuenta? <a routerLink="/registro"><strong>Registrate aqui</strong></a>
+        </p>
+        <p class="text-center mb-0">
+          &iquest;Olvidaste tu password? <a routerLink="/recuperar"><strong>Recuperarla</strong></a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

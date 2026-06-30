@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-lg navbar-retro">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">Retro<span class="brand-badge">Play</span></a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"
+            aria-controls="navMenu" aria-expanded="false" aria-label="Abrir menu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center">
+
+        <!-- Links comunes a todos -->
+        <li class="nav-item"><a class="nav-link" routerLink="/">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/catalogo">Catalogo</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/servicios">Servicios</a></li>
+
+        <!-- Publico: sin sesion -->
+        <li class="nav-item" *ngIf="!auth.logueado()">
+          <a class="nav-link" routerLink="/login">Ingresar</a>
+        </li>
+        <li class="nav-item" *ngIf="!auth.logueado()">
+          <a class="nav-link btn-registrarme" routerLink="/registro">Registrarme</a>
+        </li>
+
+        <!-- Admin -->
+        <li class="nav-item" *ngIf="auth.esAdmin()">
+          <a class="nav-link" routerLink="/admin">Panel Admin</a>
+        </li>
+
+        <!-- Cliente: carrito con contador -->
+        <li class="nav-item" *ngIf="auth.esCliente()">
+          <a class="nav-link nav-carrito" routerLink="/carrito">
+            Carrito <span class="badge-carrito">{{ carrito.totalItems() }}</span>
+          </a>
+        </li>
+
+        <!-- Logueado (cualquier rol): perfil + cerrar sesion -->
+        <li class="nav-item" *ngIf="auth.logueado()">
+          <a class="nav-link" routerLink="/perfil">Perfil</a>
+        </li>
+        <li class="nav-item" *ngIf="auth.logueado()">
+          <button class="nav-link btn-cerrar-sesion" (click)="cerrarSesion()">Cerrar sesion</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

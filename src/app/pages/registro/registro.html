@@ -1,0 +1,108 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-7">
+
+      <div class="text-center mb-4">
+        <span class="marquee">&#9733; UNETE AL CLUB &#9733;</span>
+        <h1 class="titulo-jumbo mt-2">Crear cuenta</h1>
+      </div>
+
+      <div class="card-zine">
+        <form [formGroup]="formRegistro" (ngSubmit)="onSubmit()" class="form-zine" novalidate>
+
+          <div class="row">
+            <div class="col-12 col-md-6 mb-3">
+              <label for="nombre" class="form-label">Nombre completo</label>
+              <input type="text" id="nombre" class="form-control" formControlName="nombre"
+                     [class.is-invalid]="esInvalido('nombre')" placeholder="Ej: Camila Perez">
+              <div class="invalid-feedback" *ngIf="esInvalido('nombre')">
+                <span *ngIf="formRegistro.get('nombre')?.errors?.['required']">El nombre es obligatorio.</span>
+                <span *ngIf="formRegistro.get('nombre')?.errors?.['minlength']">Al menos 3 caracteres.</span>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 mb-3">
+              <label for="usuario" class="form-label">Nombre de usuario</label>
+              <input type="text" id="usuario" class="form-control" formControlName="usuario"
+                     [class.is-invalid]="esInvalido('usuario')" placeholder="Ej: camila.perez">
+              <div class="invalid-feedback" *ngIf="esInvalido('usuario')">
+                <span *ngIf="formRegistro.get('usuario')?.errors?.['required']">El usuario es obligatorio.</span>
+                <span *ngIf="formRegistro.get('usuario')?.errors?.['pattern']">Solo letras, numeros, punto, guion o guion bajo. 3 a 20.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="correo" class="form-label">Correo</label>
+            <input type="email" id="correo" class="form-control" formControlName="correo"
+                   [class.is-invalid]="esInvalido('correo')" placeholder="ejemplo@correo.cl">
+            <div class="invalid-feedback" *ngIf="esInvalido('correo')">
+              <span *ngIf="formRegistro.get('correo')?.errors?.['required']">El correo es obligatorio.</span>
+              <span *ngIf="formRegistro.get('correo')?.errors?.['email']">El formato del correo no es valido.</span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-md-6 mb-3">
+              <label for="telefono" class="form-label">Telefono (opcional)</label>
+              <input type="tel" id="telefono" class="form-control" formControlName="telefono"
+                     [class.is-invalid]="esInvalido('telefono')" placeholder="+56 9 1234 5678">
+              <div class="invalid-feedback" *ngIf="esInvalido('telefono')">
+                Telefono invalido. Ej: +56 9 1234 5678.
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 mb-3">
+              <label for="direccion" class="form-label">Direccion (opcional)</label>
+              <input type="text" id="direccion" class="form-control" formControlName="direccion"
+                     placeholder="Calle 123, comuna">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-md-6 mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" id="password" class="form-control" formControlName="password"
+                     appPasswordToggle [class.is-invalid]="esInvalido('password')" placeholder="Ej: RetroPlay123*">
+              <div class="invalid-feedback" *ngIf="esInvalido('password')">
+                <span *ngIf="formRegistro.get('password')?.errors?.['required']">La password es obligatoria.</span>
+                <span *ngIf="formRegistro.get('password')?.errors?.['passwordInsegura']">
+                  Debe tener 8-16 chars, mayuscula, minuscula, numero y caracter especial.
+                </span>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 mb-3">
+              <label for="confirmarPassword" class="form-label">Confirmar password</label>
+              <input type="password" id="confirmarPassword" class="form-control" formControlName="confirmarPassword"
+                     appPasswordToggle [class.is-invalid]="esInvalido('confirmarPassword') || noCoinciden"
+                     placeholder="Repite tu password">
+              <div class="invalid-feedback" *ngIf="esInvalido('confirmarPassword')">
+                Debes confirmar la password.
+              </div>
+              <div class="invalid-feedback" *ngIf="noCoinciden && !esInvalido('confirmarPassword')">
+                Las passwords no coinciden.
+              </div>
+            </div>
+          </div>
+
+          <div class="alert-zine alert-zine-warn small mb-4">
+            <strong>Reglas de password:</strong> entre 8 y 16 caracteres, al menos una mayuscula,
+            una minuscula, un numero y un caracter especial (! &#64; # $ % &amp; * ? . _ -).
+          </div>
+
+          <div class="alert-zine alert-zine-warn mb-3" *ngIf="mensaje()">
+            {{ mensaje() }}
+          </div>
+
+          <button type="submit" class="btn-zine btn-zine-rojo w-100">Crear mi cuenta</button>
+        </form>
+
+        <hr class="my-4">
+        <p class="text-center mb-0">
+          &iquest;Ya tienes cuenta? <a routerLink="/login"><strong>Ingresa aqui</strong></a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

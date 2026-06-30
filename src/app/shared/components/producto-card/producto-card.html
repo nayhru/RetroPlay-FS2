@@ -1,0 +1,25 @@
+<article class="card-polaroid h-100 position-relative d-flex flex-column">
+  <span class="sticker-sale" *ngIf="producto.oferta">&#161;SALE!</span>
+
+  <a [routerLink]="['/detalle', producto.id]" class="d-block">
+    <img [src]="producto.imagen" [alt]="producto.nombre" class="producto-img" loading="lazy">
+  </a>
+
+  <h3 class="producto-nombre mt-2 mb-1">{{ producto.nombre }}</h3>
+  <p class="producto-meta mb-2">{{ producto.plataforma }} &middot; {{ producto.categoria }}</p>
+
+  <p class="producto-meta mb-2">
+    <span *ngIf="producto.stock > 0" style="color: var(--rp-ink-soft);">Stock: {{ producto.stock }}</span>
+    <strong *ngIf="producto.stock === 0" style="color: var(--rp-red);">AGOTADO</strong>
+  </p>
+
+  <div class="mt-auto d-flex justify-content-between align-items-center pt-2">
+    <span class="producto-precio">{{ producto.precio | clp }}</span>
+    <button class="btn-zine btn-zine-sm btn-zine-rojo"
+            (click)="onAgregar()" [disabled]="producto.stock === 0">
+      Agregar
+    </button>
+  </div>
+
+  <a [routerLink]="['/detalle', producto.id]" class="texto-maquina mt-2 d-block text-center">Ver detalle &raquo;</a>
+</article>

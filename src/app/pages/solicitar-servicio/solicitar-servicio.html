@@ -1,0 +1,136 @@
+<div class="container py-5">
+
+  <!-- VISTA 1: formulario -->
+  <section *ngIf="!enviada()">
+    <p class="texto-maquina mb-3"><a routerLink="/servicios">&laquo; Volver a servicios</a></p>
+
+    <div class="text-center mb-4">
+      <span class="marquee">&#9733; NUEVA SOLICITUD &#9733;</span>
+      <h1 class="titulo-jumbo mt-2">Solicitar servicio</h1>
+    </div>
+
+    <div class="row g-4">
+      <!-- Formulario -->
+      <div class="col-12 col-lg-7">
+        <div class="card-zine">
+          <form [formGroup]="formSolicitud" (ngSubmit)="onSubmit()" class="form-zine" novalidate>
+
+            <div class="mb-3">
+              <label for="tipoServicio" class="form-label">Tipo de servicio</label>
+              <select id="tipoServicio" class="form-select" formControlName="tipoServicio"
+                      [class.is-invalid]="esInvalido('tipoServicio')">
+                <option value="">-- Elegir --</option>
+                <option value="restauracion">Restauracion de cartucho</option>
+                <option value="gradeado">Gradeado de juego o carta</option>
+                <option value="box">Box personalizada</option>
+              </select>
+              <div class="invalid-feedback" *ngIf="esInvalido('tipoServicio')">Selecciona un tipo de servicio.</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="nombreItem" class="form-label">Nombre del item</label>
+              <input type="text" id="nombreItem" class="form-control" formControlName="nombreItem"
+                     [class.is-invalid]="esInvalido('nombreItem')" placeholder="Ej: Super Mario Bros (NES)">
+              <div class="invalid-feedback" *ngIf="esInvalido('nombreItem')">Indica el nombre del item (min 3 caracteres).</div>
+            </div>
+
+            <!-- Campo dinamico: condicion -->
+            <div class="mb-3" *ngIf="requiereCondicion">
+              <label for="condicion" class="form-label">Condicion actual (1-10)</label>
+              <input type="number" id="condicion" class="form-control" formControlName="condicion"
+                     [class.is-invalid]="esInvalido('condicion')" min="1" max="10" placeholder="Ej: 7">
+              <div class="invalid-feedback" *ngIf="esInvalido('condicion')">Indica la condicion (1 a 10).</div>
+              <small class="texto-maquina">1 = muy malo &middot; 10 = como nuevo</small>
+            </div>
+
+            <!-- Campos dinamicos: box personalizada -->
+            <div *ngIf="esBox">
+              <div class="alert-zine alert-zine-info small mb-3">
+                Las boxes pre-armadas estan en el <a routerLink="/catalogo" [queryParams]="{ cat: 'boxes' }">catalogo</a>.
+                Aqui armamos una a medida.
+              </div>
+              <div class="mb-3">
+                <label for="tematicaBox" class="form-label">Tematica o plataforma deseada</label>
+                <input type="text" id="tematicaBox" class="form-control" formControlName="tematicaBox"
+                       [class.is-invalid]="esInvalido('tematicaBox')" placeholder="Ej: RPGs de SNES, Pokemon GBA...">
+                <div class="invalid-feedback" *ngIf="esInvalido('tematicaBox')">Indica la tematica (min 3 caracteres).</div>
+              </div>
+              <div class="mb-3">
+                <label for="presupuestoBox" class="form-label">Presupuesto aproximado (CLP)</label>
+                <input type="number" id="presupuestoBox" class="form-control" formControlName="presupuestoBox"
+                       [class.is-invalid]="esInvalido('presupuestoBox')" min="69990" step="5000" placeholder="Ej: 89990">
+                <div class="invalid-feedback" *ngIf="esInvalido('presupuestoBox')">Minimo $69.990.</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="detalle" class="form-label">Detalle del servicio</label>
+              <textarea id="detalle" class="form-control" rows="5" formControlName="detalle"
+                        [class.is-invalid]="esInvalido('detalle')"
+                        placeholder="Cuentanos el problema o lo que necesitas."></textarea>
+              <div class="invalid-feedback" *ngIf="esInvalido('detalle')">Cuentanos algo del servicio (min 10 caracteres).</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="direccion" class="form-label">Direccion de recoleccion / entrega</label>
+              <input type="text" id="direccion" class="form-control" formControlName="direccion"
+                     [class.is-invalid]="esInvalido('direccion')" placeholder="Calle, numero, comuna">
+              <div class="invalid-feedback" *ngIf="esInvalido('direccion')">Direccion obligatoria.</div>
+            </div>
+
+            <div class="alert-zine alert-zine-info small mb-3">
+              Te contactaremos por correo o telefono para confirmar la cotizacion final.
+            </div>
+
+            <div class="alert-zine alert-zine-warn mb-3" *ngIf="errorGlobal()">{{ errorGlobal() }}</div>
+
+            <button type="submit" class="btn-zine btn-zine-rojo w-100">Enviar solicitud</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Panel lateral del servicio -->
+      <div class="col-12 col-lg-5">
+        <div class="card-zine" style="position: sticky; top: 100px;">
+          <h2 class="titulo-display">Detalle del servicio</h2>
+          <div class="mt-3" *ngIf="servicioSel() as s; else sinServicio">
+            <img [src]="s.imagen" [alt]="s.nombre"
+                 style="width: 100%; aspect-ratio: 3/2; object-fit: cover; border: 2px solid var(--rp-ink); border-radius: 2px;">
+            <h3 class="titulo-display mt-3 mb-1">{{ s.nombre }}</h3>
+            <p class="texto-maquina">{{ s.descripcion }}</p>
+            <p class="producto-precio mb-0">Desde {{ s.precioDesde | clp }}</p>
+          </div>
+          <ng-template #sinServicio>
+            <p class="texto-maquina">Selecciona un tipo de servicio para ver detalles.</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISTA 2: exito -->
+  <section *ngIf="enviada()">
+    <div class="text-center">
+      <span class="marquee" style="background: #d98f4c; color: var(--rp-ink);">&#9733; SOLICITUD ENVIADA &#9733;</span>
+      <h1 class="titulo-jumbo mt-3">&#161;<span class="acento-rojo">Gracias</span> por confiar en nosotros!</h1>
+    </div>
+
+    <div class="row justify-content-center mt-4">
+      <div class="col-12 col-md-9 col-lg-7">
+        <div class="card-zine text-center">
+          <p class="texto-maquina mb-1">N&deg; de solicitud</p>
+          <p class="titulo-display" style="font-size: 2rem; color: var(--rp-red);">{{ numeroSolicitud() }}</p>
+          <hr>
+          <p class="texto-maquina">
+            Te contactaremos a <strong>{{ correoConfirmacion() }}</strong> dentro de
+            las proximas 48 horas con la cotizacion.
+          </p>
+          <div class="d-grid gap-2 mt-3">
+            <a routerLink="/servicios" class="btn-zine btn-zine-rojo">Volver a servicios</a>
+            <a routerLink="/perfil" class="btn-zine btn-zine-sm">Ver mis solicitudes</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

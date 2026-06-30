@@ -1,0 +1,73 @@
+<div class="container py-5">
+
+  <div class="text-center mb-4">
+    <span class="marquee">&#9733; TU SELECCION &#9733;</span>
+    <h1 class="titulo-jumbo mt-2">Mi carrito</h1>
+  </div>
+
+  <!-- Carrito vacio -->
+  <div class="card-zine text-center" *ngIf="items().length === 0">
+    <h2 class="titulo-display">Tu carrito esta vacio</h2>
+    <p class="texto-maquina">Aun no agregaste productos. Echa un vistazo al catalogo.</p>
+    <a routerLink="/catalogo" class="btn-zine btn-zine-rojo">Ir al catalogo</a>
+  </div>
+
+  <!-- Carrito con items -->
+  <div class="row g-4" *ngIf="items().length > 0">
+    <div class="col-12 col-lg-8">
+      <div class="card-zine mb-3" *ngFor="let item of items()">
+        <div class="row g-3 align-items-center">
+          <div class="col-4 col-md-2">
+            <img [src]="item.imagen" [alt]="item.nombre"
+                 style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border: 2px solid var(--rp-ink);">
+          </div>
+          <div class="col-8 col-md-4">
+            <h3 class="producto-nombre m-0">{{ item.nombre }}</h3>
+            <p class="producto-meta m-0">{{ item.precio | clp }} c/u</p>
+          </div>
+          <div class="col-7 col-md-3 form-zine">
+            <label class="form-label">Cantidad</label>
+            <input type="number" class="form-control" [value]="item.cantidad"
+                   min="1" [max]="stockDisponible(item.productoId)"
+                   (change)="cambiarCantidad(item.productoId, $any($event.target).value)">
+          </div>
+          <div class="col-5 col-md-2 text-end">
+            <p class="producto-precio m-0">{{ item.precio * item.cantidad | clp }}</p>
+          </div>
+          <div class="col-12 col-md-1 d-grid">
+            <button class="btn-zine btn-zine-sm" (click)="eliminar(item.productoId)"
+                    style="background: var(--rp-red); color: var(--rp-paper);" title="Eliminar">X</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumen -->
+    <div class="col-12 col-lg-4">
+      <div class="card-zine" style="position: sticky; top: 100px;">
+        <h2 class="titulo-display">Resumen</h2>
+
+        <div class="d-flex justify-content-between texto-maquina mt-3">
+          <span>Items en carrito</span><span>{{ totalUnidades() }}</span>
+        </div>
+        <div class="d-flex justify-content-between texto-maquina">
+          <span>Subtotal</span><span>{{ total() | clp }}</span>
+        </div>
+        <div class="d-flex justify-content-between texto-maquina">
+          <span>Envio</span><span>Gratis</span>
+        </div>
+        <hr>
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="titulo-display">Total</span>
+          <span class="producto-precio" style="font-size: 2rem;">{{ total() | clp }}</span>
+        </div>
+
+        <div class="d-grid gap-2 mt-3">
+          <a routerLink="/checkout" class="btn-zine btn-zine-rojo">Ir a pagar</a>
+          <a routerLink="/catalogo" class="btn-zine btn-zine-sm">Seguir comprando</a>
+          <button class="btn-zine btn-zine-sm" (click)="vaciar()" style="background: transparent;">Vaciar carrito</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

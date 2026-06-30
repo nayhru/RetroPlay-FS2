@@ -1,0 +1,167 @@
+<div class="container py-3">
+  <div class="d-flex flex-wrap gap-2">
+    <a routerLink="/admin" class="chip-categoria">Dashboard</a>
+    <a routerLink="/admin/productos" class="chip-categoria activo">Productos</a>
+    <a routerLink="/admin/usuarios" class="chip-categoria">Usuarios</a>
+    <a routerLink="/admin/pedidos" class="chip-categoria">Pedidos</a>
+    <a routerLink="/admin/solicitudes" class="chip-categoria">Solicitudes</a>
+  </div>
+</div>
+
+<main class="container pb-5">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="titulo-jumbo m-0">Productos</h1>
+      <p class="subtitulo m-0">Gestiona el inventario.</p>
+    </div>
+    <button class="btn-zine btn-zine-rojo" (click)="abrirCrear()">+ Nuevo producto</button>
+  </div>
+
+  <!-- Filtros -->
+  <div class="card-zine mb-4 form-zine">
+    <div class="row g-3 align-items-end">
+      <div class="col-12 col-md-6">
+        <label for="busq" class="form-label">Buscar</label>
+        <input type="search" id="busq" class="form-control" [(ngModel)]="busqueda" name="busq" placeholder="Nombre, plataforma...">
+      </div>
+      <div class="col-12 col-md-4">
+        <label for="catf" class="form-label">Categoria</label>
+        <select id="catf" class="form-select" [(ngModel)]="categoria" name="catf">
+          <option value="">Todas</option>
+          <option *ngFor="let c of categorias" [value]="c">{{ c }}</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-2 d-grid">
+        <button class="btn-zine btn-zine-sm" (click)="limpiarFiltros()">Limpiar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <div class="table-responsive">
+    <table class="table tabla-zine">
+      <thead>
+        <tr>
+          <th>ID</th><th>Producto</th><th>Categoria</th><th>Plataforma</th>
+          <th class="text-end">Precio</th><th class="text-center">Stock</th>
+          <th class="text-center">Flags</th><th class="text-end">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of productosFiltrados()">
+          <td>{{ p.id }}</td>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <img [src]="p.imagen" [alt]="p.nombre" style="width:42px; height:42px; object-fit:cover; border:1px solid var(--rp-ink);">
+              <strong>{{ p.nombre }}</strong>
+            </div>
+          </td>
+          <td>{{ p.categoria }}</td>
+          <td>{{ p.plataforma }}</td>
+          <td class="text-end">{{ p.precio | clp }}</td>
+          <td class="text-center">
+            <strong *ngIf="p.stock <= 2" style="color: var(--rp-red);">{{ p.stock }}</strong>
+            <span *ngIf="p.stock > 2">{{ p.stock }}</span>
+          </td>
+          <td class="text-center">
+            <span class="chip-categoria activo" style="font-size:0.7rem;" *ngIf="p.destacado">DEST</span>
+            <span class="chip-categoria activo" style="font-size:0.7rem; background: var(--rp-red); color: var(--rp-paper);" *ngIf="p.oferta">SALE</span>
+          </td>
+          <td class="text-end">
+            <button class="btn-zine btn-zine-sm" (click)="abrirEditar(p)">Editar</button>
+            <button class="btn-zine btn-zine-sm" style="background: var(--rp-red); color: var(--rp-paper);" (click)="eliminar(p.id)">X</button>
+          </td>
+        </tr>
+        <tr *ngIf="productosFiltrados().length === 0">
+          <td colspan="8" class="text-center texto-maquina py-4">No hay productos con esos filtros.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<!-- MODAL PRODUCTO -->
+<div class="modal fade" tabindex="-1" #modalProducto aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="background: var(--rp-paper); border: 3px solid var(--rp-ink); border-radius: 2px;">
+      <div class="modal-header" style="border-bottom: 2px solid var(--rp-ink);">
+        <h2 class="titulo-display m-0">{{ tituloModal() }}</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formProducto" class="form-zine" novalidate>
+          <div class="mb-3">
+            <label for="pnombre" class="form-label">Nombre</label>
+            <input type="text" id="pnombre" class="form-control" formControlName="nombre" [class.is-invalid]="esInvalido('nombre')">
+            <div class="invalid-feedback" *ngIf="esInvalido('nombre')">Nombre obligatorio (min 3 caracteres).</div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-md-6 mb-3">
+              <label for="pcat" class="form-label">Categoria</label>
+              <select id="pcat" class="form-select" formControlName="categoria">
+                <option *ngFor="let c of categorias" [value]="c">{{ c }}</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+              <label for="pplat" class="form-label">Plataforma</label>
+              <input type="text" id="pplat" class="form-control" formControlName="plataforma"
+                     [class.is-invalid]="esInvalido('plataforma')" placeholder="NES / SNES / Genesis...">
+              <div class="invalid-feedback" *ngIf="esInvalido('plataforma')">Plataforma obligatoria.</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-md-6 mb-3">
+              <label for="pprecio" class="form-label">Precio (CLP)</label>
+              <input type="number" id="pprecio" class="form-control" formControlName="precio"
+                     [class.is-invalid]="esInvalido('precio')" min="0" step="1000">
+              <div class="invalid-feedback" *ngIf="esInvalido('precio')">Precio invalido.</div>
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+              <label for="pstock" class="form-label">Stock</label>
+              <input type="number" id="pstock" class="form-control" formControlName="stock"
+                     [class.is-invalid]="esInvalido('stock')" min="0">
+              <div class="invalid-feedback" *ngIf="esInvalido('stock')">Stock invalido.</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="pimg" class="form-label">URL o ruta de imagen</label>
+            <input type="text" id="pimg" class="form-control" formControlName="imagen"
+                   [class.is-invalid]="esInvalido('imagen')" placeholder="assets/img/productos/... o https://...">
+            <div class="invalid-feedback" *ngIf="esInvalido('imagen')">Ruta de imagen invalida.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="pdesc" class="form-label">Descripcion</label>
+            <textarea id="pdesc" class="form-control" rows="3" formControlName="descripcion"
+                      [class.is-invalid]="esInvalido('descripcion')"></textarea>
+            <div class="invalid-feedback" *ngIf="esInvalido('descripcion')">Descripcion minima 10 caracteres.</div>
+          </div>
+
+          <div class="row">
+            <div class="col-6">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="pdest" formControlName="destacado">
+                <label class="form-check-label" for="pdest">Destacar en home</label>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="pof" formControlName="oferta">
+                <label class="form-check-label" for="pof">Marcar en oferta</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert-zine alert-zine-warn mt-3" *ngIf="errorModal()">{{ errorModal() }}</div>
+        </form>
+      </div>
+      <div class="modal-footer" style="border-top: 2px solid var(--rp-ink);">
+        <button type="button" class="btn-zine btn-zine-sm" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn-zine btn-zine-rojo" (click)="guardar()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>

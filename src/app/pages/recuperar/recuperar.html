@@ -1,0 +1,71 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-5">
+
+      <div class="text-center mb-4">
+        <span class="marquee">&#9733; RESTORE / RESET &#9733;</span>
+        <h1 class="titulo-jumbo mt-2">Recuperar password</h1>
+      </div>
+
+      <div class="card-zine">
+        <div class="alert-zine alert-zine-warn small mb-4">
+          Te enviaremos un codigo de verificacion al correo registrado para
+          confirmar el cambio. Asegurate de usar el mismo correo con el que
+          creaste tu cuenta.
+        </div>
+
+        <form [formGroup]="formRecuperar" (ngSubmit)="onSubmit()" class="form-zine" novalidate>
+
+          <div class="mb-3">
+            <label for="correo" class="form-label">Correo registrado</label>
+            <input type="email" id="correo" class="form-control" formControlName="correo"
+                   [class.is-invalid]="esInvalido('correo')" placeholder="tucorreo@ejemplo.cl">
+            <div class="invalid-feedback" *ngIf="esInvalido('correo')">
+              <span *ngIf="formRecuperar.get('correo')?.errors?.['required']">El correo es obligatorio.</span>
+              <span *ngIf="formRecuperar.get('correo')?.errors?.['email']">El formato del correo no es valido.</span>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="nuevoPassword" class="form-label">Nueva password</label>
+            <input type="password" id="nuevoPassword" class="form-control" formControlName="nuevoPassword"
+                   appPasswordToggle [class.is-invalid]="esInvalido('nuevoPassword')" placeholder="Nueva password">
+            <div class="invalid-feedback" *ngIf="esInvalido('nuevoPassword')">
+              <span *ngIf="formRecuperar.get('nuevoPassword')?.errors?.['required']">La password es obligatoria.</span>
+              <span *ngIf="formRecuperar.get('nuevoPassword')?.errors?.['passwordInsegura']">
+                Debe tener 8-16 chars, mayuscula, minuscula, numero y caracter especial.
+              </span>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="confirmarPassword" class="form-label">Confirmar nueva password</label>
+            <input type="password" id="confirmarPassword" class="form-control" formControlName="confirmarPassword"
+                   appPasswordToggle [class.is-invalid]="esInvalido('confirmarPassword') || noCoinciden" placeholder="Repitela">
+            <div class="invalid-feedback" *ngIf="esInvalido('confirmarPassword')">
+              Debes confirmar la password.
+            </div>
+            <div class="invalid-feedback" *ngIf="noCoinciden && !esInvalido('confirmarPassword')">
+              Las passwords no coinciden.
+            </div>
+          </div>
+
+          <div class="alert-zine alert-zine-info small mb-4">
+            <strong>Reglas:</strong> 8-16 chars, mayuscula, minuscula, numero y especial.
+          </div>
+
+          <div class="alert-zine alert-zine-warn mb-3" *ngIf="errorGlobal()">
+            {{ errorGlobal() }}
+          </div>
+
+          <button type="submit" class="btn-zine btn-zine-rojo w-100">Actualizar password</button>
+        </form>
+
+        <hr class="my-4">
+        <p class="text-center mb-0">
+          <a routerLink="/login"><strong>Volver al login</strong></a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
