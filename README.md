@@ -109,7 +109,7 @@ src/app/
 | Libreria de documentacion | Compodoc (`npm run docs`) + JSDoc en todo el codigo |
 | Formularios reactivos con validaciones | login, registro, recuperar, perfil, checkout, solicitar-servicio |
 | Pruebas unitarias | 19 tests con Jasmine/Karma (`npm test`) |
-| Video de presentacion | Grabacion en Kaltura |
+| Video de presentacion | Video en la entrega + drive |
 
 ## Roles
 
